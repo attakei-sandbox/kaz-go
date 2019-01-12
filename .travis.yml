@@ -3,5 +3,11 @@ language: go
 go:
   - "1.10"
 
+before_install:
+  - go get github.com/golang/dep/...
+
+install:
+  - $GOPATH/bin/dep ensure
+
 script:
   - go test ./...
