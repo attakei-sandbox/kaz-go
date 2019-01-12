@@ -25,3 +25,19 @@ func TestMakeWorkDirs_ok(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestMakeDefaultConf_ok(t *testing.T) {
+	dir, err := ioutil.TempDir("", "kaz.testing.")
+	defer os.RemoveAll(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = makeDefaultConf(dir); err != nil {
+		t.Fatal(err)
+	}
+	if st, err := os.Stat(dir + "/etc/kaz.conf"); err != nil {
+		t.Fatal(err)
+	} else if st.Size() <= 0 {
+		t.Fatal("Created config file is not size")
+	}
+}

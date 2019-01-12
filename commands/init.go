@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"text/template"
 
 	"github.com/spf13/cobra"
 )
@@ -22,6 +23,7 @@ var initCmd = &cobra.Command{
 		// Generate work directories
 		makeWorkDirs("/") // TODO: Accept custom dir
 		// Make base files
+		makeDefaultConf("/")
 		// Display finish message
 		fmt.Println("Initialize is done!")
 	},
@@ -40,5 +42,22 @@ func makeWorkDirs(basePath string) error {
 			log.Fatal(err)
 		}
 	}
+	return nil
+}
+
+// Make default config file
+func makeDefaultConf(basePath string) error {
+	confPath := path.Join(basePath, "etc/kaz.conf")
+	_ = os.Mkdir(path.Join(basePath, "etc"), 0755)
+	tmpl, err := template.New("kaz-default-config").Parse("# kaz config")
+	if err != nil {
+		log.Fatal(err)
+	}
+	f, err := os.Create(confPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	tmpl.Execute(f, nil)
+	f.Close()
 	return nil
 }
