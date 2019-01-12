@@ -20,11 +20,11 @@ var initCmd = &cobra.Command{
 	Short: "Setting up workspace",
 	Long:  "Generate workspace directory and config",
 	Run: func(cmd *cobra.Command, args []string) {
-		// Generate config(if not argumented)
 		// Generate work directories
 		makeWorkDirs("/") // TODO: Accept custom dir
-		// Make base files
+		// Generate config(if not argumented)
 		makeDefaultConf("/")
+		// Make base files
 		// Display finish message
 		fmt.Println("Initialize is done!")
 	},
