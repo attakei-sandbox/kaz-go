@@ -7,6 +7,7 @@ import (
 	"path"
 	"text/template"
 
+	"github.com/gobuffalo/packr"
 	"github.com/spf13/cobra"
 )
 
@@ -47,9 +48,11 @@ func makeWorkDirs(basePath string) error {
 
 // Make default config file
 func makeDefaultConf(basePath string) error {
+	box := packr.NewBox("../assets")
 	confPath := path.Join(basePath, "etc/kaz.conf")
 	_ = os.Mkdir(path.Join(basePath, "etc"), 0755)
-	tmpl, err := template.New("kaz-default-config").Parse("# kaz config")
+	tmplStr, err := box.FindString("kaz.conf.tpl")
+	tmpl, err := template.New("kaz-conf").Parse(tmplStr)
 	if err != nil {
 		log.Fatal(err)
 	}
