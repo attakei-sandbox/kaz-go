@@ -8,8 +8,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile string = "/etc/kaz.cfg"
-
 var rootCmd = &cobra.Command{
 	Use:   "kaz",
 	Short: "Simple AppImage manager",
@@ -29,7 +27,7 @@ func init() {
 
 func initConfig() {
 	viper.SetConfigType("toml")
-	viper.SetConfigFile(cfgFile)
+	viper.SetConfigFile(defaultConfigPath)
 	if err := viper.ReadInConfig(); err != nil {
 		fmt.Println("Can't read config:", err)
 	} else {
