@@ -6,3 +6,7 @@
 * GitHubなどのみにある野良AppImageのバージョンをチェック
 * AppImageの最新バージョンをダウンロード
 * 専用の ``bin`` フォルダにセットアップして、ターミナルなどから利用できるようにする
+
+.. toctree::
+
+   environment
