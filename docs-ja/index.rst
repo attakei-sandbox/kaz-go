@@ -1,20 +1,8 @@
-.. kaz documentation master file, created by
-   sphinx-quickstart on Wed Jan 16 19:35:22 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+|THIS|
+======
 
-Welcome to kaz's documentation!
-===============================
+|THIS| は |AUTHOR| がAppImageなどを普段遣いするとき用に、次のことを目的として動くCLIです。
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+* GitHubなどのみにある野良AppImageのバージョンをチェック
+* AppImageの最新バージョンをダウンロード
+* 専用の ``bin`` フォルダにセットアップして、ターミナルなどから利用できるようにする
