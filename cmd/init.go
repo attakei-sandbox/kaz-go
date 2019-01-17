@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
@@ -29,7 +29,12 @@ var initCmd = &cobra.Command{
 	Short: "Initialize kaz working space",
 	Long:  `Initialize working space and instructs next action for user.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("init called")
+		baseDir := os.Getenv("HOME")
+		if err := createWorkDirs(baseDir); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		outputNextMessage(os.Stdout, baseDir)
 	},
 }
 
@@ -58,7 +63,7 @@ func createWorkDirs(baseDir string) error {
 		".kaz/data",
 	}
 	for _, target := range targets {
-		if err := os.Mkdir(path.Join(baseDir, target), 0700); err != nil {
+		if err := os.Mkdir(filepath.Join(baseDir, target), 0700); err != nil {
 			return err
 		}
 	}
