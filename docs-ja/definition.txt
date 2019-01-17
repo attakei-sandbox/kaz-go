@@ -1,2 +1,2 @@
-.. |THIS| replace:: kaz
-.. |AUTHOR| replace:: Kazuya Takei
+.. |THIS| replace:: **kaz**
+.. |AUTHOR| replace:: **Kazuya Takei**
