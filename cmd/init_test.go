@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bytes"
 	"io/ioutil"
 	"os"
 	"path"
@@ -33,4 +34,11 @@ func TestCreateWorkDirs(t *testing.T) {
 	assert.DirExists(path.Join(dir, ".kaz", "bin"))
 	assert.DirExists(path.Join(dir, ".kaz", "log"))
 	assert.DirExists(path.Join(dir, ".kaz", "repos"))
+}
+
+func TestOutputNextMessage(t *testing.T) {
+	assert := require.New(t)
+	w := new(bytes.Buffer)
+	outputNextMessage(w, "/home/attakei")
+	assert.Contains(w.String(), "/home/attakei/.kaz/bin")
 }

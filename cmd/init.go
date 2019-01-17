@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path"
 
@@ -34,6 +35,18 @@ var initCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(initCmd)
+}
+
+// TODO: More message
+func outputNextMessage(writer io.Writer, baseDir string) {
+	fmt.Fprintf(writer, `Congratulations!!
+You can manage applications by kaz.
+
+Application is installed at %s/.kaz/bin
+Set PATH into it
+
+export PATH=%s/.kaz/bin:$PATH
+`, baseDir, baseDir)
 }
 
 func createWorkDirs(baseDir string) error {
