@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "github.com/attakei/kaz/cmd"
 
 func main() {
-	fmt.Println("Hello kaz")
+	cmd.Execute()
 }
