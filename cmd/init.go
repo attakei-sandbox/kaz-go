@@ -16,6 +16,8 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"path"
 
 	"github.com/spf13/cobra"
 )
@@ -32,4 +34,20 @@ var initCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(initCmd)
+}
+
+func createWorkDirs(baseDir string) error {
+	targets := []string{
+		".kaz",
+		".kaz/log",
+		".kaz/bin",
+		".kaz/repos",
+		".kaz/data",
+	}
+	for _, target := range targets {
+		if err := os.Mkdir(path.Join(baseDir, target), 0700); err != nil {
+			return err
+		}
+	}
+	return nil
 }
