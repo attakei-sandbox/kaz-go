@@ -8,5 +8,7 @@
 * 専用の ``bin`` フォルダにセットアップして、ターミナルなどから利用できるようにする
 
 .. toctree::
+   :maxdepth: 2
 
    environment
+   subcommands/index
