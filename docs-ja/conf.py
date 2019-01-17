@@ -70,7 +70,7 @@ pygments_style = None
 
 
 rst_prolog = """
-.. include:: definition.txt
+.. include:: /definition.txt
 """
 
 # -- Options for HTML output -------------------------------------------------
