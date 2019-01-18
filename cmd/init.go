@@ -63,7 +63,12 @@ var initCmd = &cobra.Command{
 	Long:  `Initialize working space and instructs next action for user.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		param := NewParam(os.Getenv("HOME"))
-		if err := createWorkDirs(param.BaseDir); err != nil {
+		workSubDirs := []string{
+			"log",
+			"bin",
+			"repos",
+		}
+		if err := createWorkDirs(param.WorkDir, workSubDirs); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
@@ -85,16 +90,14 @@ func outputNextMessage(writer io.Writer, param InitParam) error {
 	return nil
 }
 
-func createWorkDirs(baseDir string) error {
-	targets := []string{
-		".kaz",
-		".kaz/log",
-		".kaz/bin",
-		".kaz/repos",
-		".kaz/data",
+func createWorkDirs(workDir string, subDirs []string) error {
+	if err := os.Mkdir(workDir, 0700); os.IsExist(err) {
+		// no ope
+	} else if err != nil {
+		return err
 	}
-	for _, target := range targets {
-		if err := os.Mkdir(filepath.Join(baseDir, target), 0700); err != nil {
+	for _, target := range subDirs {
+		if err := os.Mkdir(filepath.Join(workDir, target), 0700); err != nil {
 			return err
 		}
 	}

@@ -29,11 +29,9 @@ func TestCreateWorkDirs(t *testing.T) {
 	}
 	defer os.RemoveAll(dir)
 
-	createWorkDirs(dir)
-	assert.DirExists(path.Join(dir, ".kaz"))
-	assert.DirExists(path.Join(dir, ".kaz", "bin"))
-	assert.DirExists(path.Join(dir, ".kaz", "log"))
-	assert.DirExists(path.Join(dir, ".kaz", "repos"))
+	createWorkDirs(dir, []string{"bin"})
+	assert.DirExists(path.Join(dir))
+	assert.DirExists(path.Join(dir, "bin"))
 }
 
 func TestOutputNextMessage(t *testing.T) {
