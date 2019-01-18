@@ -42,3 +42,16 @@ func TestOutputNextMessage(t *testing.T) {
 	outputNextMessage(w, "/home/attakei")
 	assert.Contains(w.String(), "/home/attakei/.kaz/bin")
 }
+
+func TestCreateDefaultConfig(t *testing.T) {
+	assert := require.New(t)
+	dir, err := ioutil.TempDir("", "kaz-cmd-init")
+	if err != nil {
+		assert.Fail("Failure create temp dir")
+	}
+	defer os.RemoveAll(dir)
+
+	confPath := path.Join(dir, "kaz.cnf")
+	createDefaultConfig(confPath)
+	assert.FileExists(confPath)
+}

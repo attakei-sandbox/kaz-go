@@ -17,6 +17,7 @@ package cmd
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -66,6 +67,19 @@ func createWorkDirs(baseDir string) error {
 		if err := os.Mkdir(filepath.Join(baseDir, target), 0700); err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func createDefaultConfig(target string) error {
+	// TODO: templating after
+	const configContent = `# ------
+# kaz config
+# -----
+work_dir = ~/.kaz
+`
+	if err := ioutil.WriteFile(target, []byte(configContent), 0600); err != nil {
+		return err
 	}
 	return nil
 }
