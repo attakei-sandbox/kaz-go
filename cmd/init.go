@@ -24,6 +24,24 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Template for content of config file (used in createDefaultConfig)
+const configContentTmpl = `# ------
+# kaz config
+# -----
+work_dir = {{.BaseDir}}
+`
+
+// Template for message after done initialize (used in outputNextMessage)
+// TODO: More message
+const outputMessageTmpl = `Congratulations!!
+You can manage applications by kaz.
+
+Application is installed at {{.WorkDir}}/bin
+Set PATH into it
+
+export PATH={{.workDir}}/bin:$PATH
+`
+
 type InitParam struct {
 	BaseDir    string
 	WorkDir    string
@@ -58,17 +76,8 @@ func init() {
 	rootCmd.AddCommand(initCmd)
 }
 
-// TODO: More message
 func outputNextMessage(writer io.Writer, param InitParam) error {
-	const msg = `Congratulations!!
-You can manage applications by kaz.
-
-Application is installed at {{.WorkDir}}/bin
-Set PATH into it
-
-export PATH={{.workDir}}/bin:$PATH
-`
-	if tmpl, err := template.New("init-output").Parse(msg); err != nil {
+	if tmpl, err := template.New("init-output").Parse(outputMessageTmpl); err != nil {
 		return err
 	} else if err := tmpl.Execute(writer, param); err != nil {
 		return err
@@ -94,12 +103,7 @@ func createWorkDirs(baseDir string) error {
 
 func createDefaultConfig(target string, param InitParam) error {
 	// TODO: file templating after
-	const contentTmpl = `# ------
-# kaz config
-# -----
-work_dir = {{.BaseDir}}
-`
-	if tmpl, err := template.New("default-config").Parse(contentTmpl); err != nil {
+	if tmpl, err := template.New("default-config").Parse(configContentTmpl); err != nil {
 		return err
 	} else if f, err := os.Create(target); err != nil {
 		return err
