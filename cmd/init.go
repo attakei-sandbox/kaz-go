@@ -17,12 +17,16 @@ package cmd
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
+	"text/template"
 
 	"github.com/spf13/cobra"
 )
+
+type InitParam struct {
+	BaseDir string
+}
 
 // initCmd represents the init command
 var initCmd = &cobra.Command{
@@ -30,12 +34,13 @@ var initCmd = &cobra.Command{
 	Short: "Initialize kaz working space",
 	Long:  `Initialize working space and instructs next action for user.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		baseDir := os.Getenv("HOME")
-		if err := createWorkDirs(baseDir); err != nil {
+		param := InitParam{BaseDir: os.Getenv("HOME")}
+		if err := createWorkDirs(param.BaseDir); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		outputNextMessage(os.Stdout, baseDir)
+		createDefaultConfig(filepath.Join(param.BaseDir, "kaz.cfg"), param)
+		outputNextMessage(os.Stdout, param)
 	},
 }
 
@@ -44,15 +49,21 @@ func init() {
 }
 
 // TODO: More message
-func outputNextMessage(writer io.Writer, baseDir string) {
-	fmt.Fprintf(writer, `Congratulations!!
+func outputNextMessage(writer io.Writer, param InitParam) error {
+	const msg = `Congratulations!!
 You can manage applications by kaz.
 
-Application is installed at %s/.kaz/bin
+Application is installed at {{.BaseDir}}/.kaz/bin
 Set PATH into it
 
-export PATH=%s/.kaz/bin:$PATH
-`, baseDir, baseDir)
+export PATH={{.BaseDir}}/.kaz/bin:$PATH
+`
+	if tmpl, err := template.New("init-output").Parse(msg); err != nil {
+		return err
+	} else if err := tmpl.Execute(writer, param); err != nil {
+		return err
+	}
+	return nil
 }
 
 func createWorkDirs(baseDir string) error {
@@ -71,14 +82,18 @@ func createWorkDirs(baseDir string) error {
 	return nil
 }
 
-func createDefaultConfig(target string) error {
-	// TODO: templating after
-	const configContent = `# ------
+func createDefaultConfig(target string, param InitParam) error {
+	// TODO: file templating after
+	const contentTmpl = `# ------
 # kaz config
 # -----
-work_dir = ~/.kaz
+work_dir = {{.BaseDir}}
 `
-	if err := ioutil.WriteFile(target, []byte(configContent), 0600); err != nil {
+	if tmpl, err := template.New("default-config").Parse(contentTmpl); err != nil {
+		return err
+	} else if f, err := os.Create(target); err != nil {
+		return err
+	} else if err := tmpl.Execute(f, param); err != nil {
 		return err
 	}
 	return nil
