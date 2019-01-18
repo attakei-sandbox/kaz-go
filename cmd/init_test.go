@@ -37,7 +37,7 @@ func TestCreateWorkDirs(t *testing.T) {
 }
 
 func TestOutputNextMessage(t *testing.T) {
-	param := InitParam{BaseDir: "/home/attakei"}
+	param := NewParam("/home/attakei")
 	assert := require.New(t)
 	w := new(bytes.Buffer)
 	outputNextMessage(w, param)
@@ -52,7 +52,7 @@ func TestCreateDefaultConfig(t *testing.T) {
 	}
 	defer os.RemoveAll(dir)
 
-	param := InitParam{BaseDir: dir}
+	param := NewParam(dir)
 	confPath := path.Join(dir, "kaz.cnf")
 	createDefaultConfig(confPath, param)
 	assert.FileExists(confPath)

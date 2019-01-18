@@ -25,7 +25,17 @@ import (
 )
 
 type InitParam struct {
-	BaseDir string
+	BaseDir    string
+	WorkDir    string
+	ConfigPath string
+}
+
+func NewParam(baseDir string) InitParam {
+	p := InitParam{}
+	p.BaseDir = baseDir
+	p.WorkDir = filepath.Join(p.BaseDir, ".kaz")
+	p.ConfigPath = filepath.Join(p.WorkDir, "kaz.cnf")
+	return p
 }
 
 // initCmd represents the init command
@@ -34,7 +44,7 @@ var initCmd = &cobra.Command{
 	Short: "Initialize kaz working space",
 	Long:  `Initialize working space and instructs next action for user.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		param := InitParam{BaseDir: os.Getenv("HOME")}
+		param := NewParam(os.Getenv("HOME"))
 		if err := createWorkDirs(param.BaseDir); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -53,10 +63,10 @@ func outputNextMessage(writer io.Writer, param InitParam) error {
 	const msg = `Congratulations!!
 You can manage applications by kaz.
 
-Application is installed at {{.BaseDir}}/.kaz/bin
+Application is installed at {{.WorkDir}}/bin
 Set PATH into it
 
-export PATH={{.BaseDir}}/.kaz/bin:$PATH
+export PATH={{.workDir}}/bin:$PATH
 `
 	if tmpl, err := template.New("init-output").Parse(msg); err != nil {
 		return err
