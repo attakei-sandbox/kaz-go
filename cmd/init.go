@@ -28,7 +28,7 @@ import (
 const configContentTmpl = `# ------
 # kaz config
 # -----
-work_dir = {{.BaseDir}}
+work_dir = {{.WorkDir}}
 `
 
 // Template for message after done initialize (used in outputNextMessage)
@@ -72,7 +72,7 @@ var initCmd = &cobra.Command{
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		createDefaultConfig(filepath.Join(param.BaseDir, "kaz.cfg"), param)
+		createDefaultConfig(filepath.Join(param.WorkDir, "kaz.cfg"), param)
 		outputNextMessage(os.Stdout, param)
 	},
 }
